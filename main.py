@@ -22,7 +22,9 @@ def __kill_active_PID(pid:str) -> None:
     return
 
 def __check_for_new_files(directory:str, name:str,time_to_kill:int = 30):
+    print(f'name: {name}')
     pid:list[str] = str(system(f'pidof {name}')).split('\n')
+    print(pid)
     t:dict
     with open(f'{directory}/{ACTIVE_FILE}') as f :
         t = json.load(f)
@@ -32,7 +34,7 @@ def __check_for_new_files(directory:str, name:str,time_to_kill:int = 30):
             pass
         print(f'PID added : {e}')
         __add_active_PID(directory, time_to_kill)
-    if len(t.keys()) <= 0:
+    if len(t.keys()) <= 0 and pid != '':
         __add_active_PID(directory, time_to_kill)
 
 
