@@ -23,29 +23,34 @@ def __kill_active_PID(pid:str) -> None:
 
 
 def __add_active_PID(pid:str, directory:str, time_to_kill:int = 30) -> None:
-    with open(f'{directory}/{ACTIVE_FILE}', 'w', encoding='utf-8') as f:
+    t:dict
+    with open(f'{directory}/{ACTIVE_FILE}', 'r', encoding='utf-8') as f:
         t:dict = json.load(f)
-        if pid in t.keys():
-            #TODO: logs
-            return
-        t[pid] = {
-            'time_to_kill':(datetime.now() + timedelta(seconds=time_to_kill)).isoformat()
-        }
-        json.dump(t, f)
+    if pid in t.keys():
+        #TODO: logs
+        return
+    t[pid] = {
+        'time_to_kill':(datetime.now() + timedelta(seconds=time_to_kill)).isoformat()
+    }
 
+    with open(f'{directory}/{ACTIVE_FILE}', 'w', encoding='utf-8') as f:
+        json.dump(t, f)
         f.close()
     return
 
 
 def __remove_inactive_PID(pid:str,directory:str) -> None:
-    with open(f'{directory}/{ACTIVE_FILE}','w',encoding='utf-8') as f:
+    t:dict
+    with open(f'{directory}/{ACTIVE_FILE}','r',encoding='utf-8') as f:
         t:dict = json.load(f)
-        if pid not in t.keys():
-            #TODO: logs
-            return
-        t.pop(pid)
-        json.dump(t, f)
+        f.close()
+    if pid not in t.keys():
+        #TODO: logs
+        return
+    t.pop(pid)
 
+    with open(f'{directory}/{ACTIVE_FILE}','w',encoding='utf-8') as f:
+        json.dump(t, f)
         f.close()
     return
 
