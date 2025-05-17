@@ -11,9 +11,9 @@ def __args() -> dict:
 )
     parser.add_argument('-a', '--add', action='store_true')
     parser.add_argument('-t','--time')
-    parser.add_argument('-p','--pid')
     parser.add_argument('-v','--verify', action='store_true')
     parser.add_argument('-d','--directory',required=True)
+    parser.add_argument('-n','--name')
     return vars(parser.parse_args())
 
 
@@ -21,9 +21,23 @@ def __kill_active_PID(pid:str) -> None:
     system(f'kill {pid}')
     return
 
-
-def __add_active_PID(pid:str, directory:str, time_to_kill:int = 30) -> None:
+def __check_for_new_files(directory:str, name:str,time_to_kill:int = 30):
+    pid:list[str] = str(system(f'pidof {name}')).split('\n')
     t:dict
+    with open(f'{directory}/{ACTIVE_FILE}') as f :
+        t = json.load(f)
+        f.close()
+    for e in t.keys():
+        if pid in e:
+            pass
+        print(f'PID added : {e}')
+        __add_active_PID(directory, time_to_kill)
+
+
+
+def __add_active_PID(directory:str,time_to_kill:int = 30) -> None:
+    t:dict
+    pid:str = ''
     time_to_kill = int(time_to_kill)
     with open(f'{directory}/{ACTIVE_FILE}', 'r', encoding='utf-8') as f:
         t:dict = json.load(f)
@@ -92,7 +106,7 @@ def main(args:dict) -> None:
     directory:str = args['directory']
     if args['add']:
         try:
-            __add_active_PID(args['pid'], directory, args['time'])
+            __check_for_new_files(directory, args['time'])
         except Exception.args as e:
             #TODO: logs
             print(f'Err {e}')
