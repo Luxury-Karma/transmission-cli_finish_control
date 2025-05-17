@@ -154,7 +154,7 @@ def kill_pids(directory:str) -> None:
 
 
 def directory_setup(args:dict) -> str:
-    t: dict = __open_setting_json('./')
+    t: dict = __open_setting_json('.')
 
     if args["directory"] and args["directory"] != '':
         with open(f'{args["directory"]}/{SETTING_FILE}', 'r') as f:
