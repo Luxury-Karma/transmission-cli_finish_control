@@ -110,7 +110,7 @@ def main(args:dict) -> None:
     directory:str = args['directory']
     if args['add']:
         try:
-            __check_for_new_files(directory,args['name'], args['time'])
+            __check_for_new_files(directory,args['name'])
         except Exception.args as e:
             #TODO: logs
             print(f'Err {e}')
