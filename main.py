@@ -143,11 +143,11 @@ def kill_pids(directory:str) -> None:
 
 
 def directory_setup(args:dict) -> str:
-
     t: dict
-    with open(f'{args["directory"]}/{SETTING_FILE}', 'r') as f:
-        t = json.load(f)
-        f.close()
+    if args["directory"] and args["directory"] != '':
+        with open(f'{args["directory"]}/{SETTING_FILE}', 'r') as f:
+            t = json.load(f)
+            f.close()
 
     directory: str = t['active_directory']
 
