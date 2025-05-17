@@ -3,6 +3,7 @@ from os import system
 import json
 from datetime import datetime, timedelta
 import re
+import subprocess
 
 ACTIVE_FILE:str = "active.json"
 
@@ -23,9 +24,11 @@ def __kill_active_PID(pid:str) -> None:
     return
 
 def __check_for_new_files(directory:str, name:str,time_to_kill:int = 30):
+    d = subprocess.run([f'pidof {name}'], stdout=subprocess.PIPE)
+    print(d)
     d = str(system(f'pidof {name}'))
     print(d)
-    pid:list[str] = re.split(r'\d{4}',d)
+    pid:list[str] = re.findall(r'\d{4}',f'{d}')
     print(pid)
     t:dict
     with open(f'{directory}/{ACTIVE_FILE}') as f :
