@@ -29,20 +29,20 @@ def __check_for_new_files(directory:str, name:str,time_to_kill:int = 30):
     with open(f'{directory}/{ACTIVE_FILE}') as f :
         t = json.load(f)
         f.close()
-    for e in t.keys():
-        if pid in e:
+    for e in pid:
+        if e in t.keys():
             pass
         print(f'PID added : {e}')
-        __add_active_PID(directory, time_to_kill)
+        __add_active_PID(directory, e, time_to_kill)
+
     if len(t.keys()) <= 0 and pid != '':
-        __add_active_PID(directory, time_to_kill)
+        for e in pid:
+            __add_active_PID(directory, e, time_to_kill)
 
 
 
-def __add_active_PID(directory:str,time_to_kill:int = 30) -> None:
+def __add_active_PID(directory:str,pid:str, time_to_kill:int = 30) -> None:
     t:dict
-    pid:str = ''
-    time_to_kill = int(time_to_kill)
     with open(f'{directory}/{ACTIVE_FILE}', 'r', encoding='utf-8') as f:
         t:dict = json.load(f)
     if pid in t.keys():
