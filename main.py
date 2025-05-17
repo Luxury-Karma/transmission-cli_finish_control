@@ -9,11 +9,11 @@ def __args() -> dict:
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
     description="Kill PID after a determine amount of time for program who do not want to die ! "
 )
-    parser.add_argument('-a', '--add', description='Add a new PID to verify and kill')
-    parser.add_argument('-t','--time', description='What is the minimum time to kill it')
-    parser.add_argument('-p','--pid',description='The PID to add to the list')
-    parser.add_argument('-v','--verify', description='Verify if any of those PID should be kill')
-    parser.add_argument('-d','--directory',required=True, description='directory location where the software save its files')
+    parser.add_argument('-a', '--add')
+    parser.add_argument('-t','--time')
+    parser.add_argument('-p','--pid')
+    parser.add_argument('-v','--verify')
+    parser.add_argument('-d','--directory',required=True)
     return vars(parser.parse_args())
 
 
