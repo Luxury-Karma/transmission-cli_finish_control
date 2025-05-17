@@ -9,7 +9,7 @@ def __args() -> dict:
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
     description="Kill PID after a determine amount of time for program who do not want to die ! "
 )
-    parser.add_argument('-a', '--add')
+    parser.add_argument('-a', '--add', action='store_true')
     parser.add_argument('-t','--time')
     parser.add_argument('-p','--pid')
     parser.add_argument('-v','--verify')
@@ -24,13 +24,14 @@ def __kill_active_PID(pid:str) -> None:
 
 def __add_active_PID(pid:str, directory:str, time_to_kill:int = 30) -> None:
     t:dict
+    print(f'PID : {pid}')
     time_to_kill = int(time_to_kill)
     with open(f'{directory}/{ACTIVE_FILE}', 'r', encoding='utf-8') as f:
         t:dict = json.load(f)
     if pid in t.keys():
         #TODO: logs
         return
-    t[pid] = {
+    t[f'{pid}'] = {
         'time_to_kill':(datetime.now() + timedelta(seconds=time_to_kill)).isoformat()
     }
 
@@ -91,6 +92,7 @@ def kill_pids(directory:str) -> None:
 def main(args:dict) -> None:
     directory:str = args['directory']
     if args['add']:
+        print(args['pid'])
         try:
             __add_active_PID(args['pid'], directory, args['time'])
         except Exception.args as e:
