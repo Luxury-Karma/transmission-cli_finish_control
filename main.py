@@ -32,6 +32,8 @@ def __check_for_new_files(directory:str, name:str,time_to_kill:int = 30):
             pass
         print(f'PID added : {e}')
         __add_active_PID(directory, time_to_kill)
+    if len(t.keys()) <= 0:
+        __add_active_PID(directory, time_to_kill)
 
 
 
