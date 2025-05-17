@@ -2,6 +2,7 @@ import argparse
 from os import system
 import json
 from datetime import datetime, timedelta
+import re
 
 ACTIVE_FILE:str = "active.json"
 
@@ -23,7 +24,9 @@ def __kill_active_PID(pid:str) -> None:
 
 def __check_for_new_files(directory:str, name:str,time_to_kill:int = 30):
     print(f'name: {name}')
-    pid:list[str] = str(system(f'pidof {name}')).split('\n')
+
+    pid:list[str] = re.findall('\d{4}',str(system(f'pidof {name}')))
+
     print(pid)
     t:dict
     with open(f'{directory}/{ACTIVE_FILE}') as f :
@@ -34,10 +37,6 @@ def __check_for_new_files(directory:str, name:str,time_to_kill:int = 30):
             pass
         print(f'PID added : {e}')
         __add_active_PID(directory, e, time_to_kill)
-
-    if len(t.keys()) <= 0 and pid != '':
-        for e in pid:
-            __add_active_PID(directory, e, time_to_kill)
 
 
 
