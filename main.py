@@ -26,6 +26,7 @@ def __kill_active_PID(pid:str) -> None:
 def __check_for_new_files(directory:str, name:str,time_to_kill:int = 30):
     try:
         d = subprocess.check_output(['pidof',name]).strip()
+        print(f'Process found : {d}')
     except Exception.args:
         print('Error in the command launch')
 
@@ -39,6 +40,7 @@ def __check_for_new_files(directory:str, name:str,time_to_kill:int = 30):
             if e in t.keys():
                 pass
             __add_active_PID(directory, e, time_to_kill)
+            print(f'process added {e}')
     except Exception.args:
         print('Error in the reading of the file')
 
