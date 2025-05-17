@@ -24,26 +24,34 @@ def __kill_active_PID(pid:str) -> None:
     return
 
 def __check_for_new_files(directory:str, name:str,time_to_kill:int = 30):
-    d = subprocess.check_output(['pidof',name]).strip()
-    print(d)
+    try:
+        d = subprocess.check_output(['pidof',name]).strip()
+    except Exception.args:
+        print('Error in the command launch')
+
     pid:list[str] = re.findall(r'\d{4}',f'{d}')
-    print(pid)
     t:dict
-    with open(f'{directory}/{ACTIVE_FILE}') as f :
-        t = json.load(f)
-        f.close()
-    for e in pid:
-        if e in t.keys():
-            pass
-        print(f'PID added : {e}')
-        __add_active_PID(directory, e, time_to_kill)
+    try:
+        with open(f'{directory}/{ACTIVE_FILE}') as f :
+            t = json.load(f)
+            f.close()
+        for e in pid:
+            if e in t.keys():
+                pass
+            __add_active_PID(directory, e, time_to_kill)
+    except Exception.args:
+        print('Error in the reading of the file')
 
 
 
 def __add_active_PID(directory:str,pid:str, time_to_kill:int = 30) -> None:
     t:dict
-    with open(f'{directory}/{ACTIVE_FILE}', 'r', encoding='utf-8') as f:
-        t:dict = json.load(f)
+    try:
+        with open(f'{directory}/{ACTIVE_FILE}', 'r', encoding='utf-8') as f:
+            t:dict = json.load(f)
+    except Exception.args:
+        print('Error in the reading of the file')
+
     if pid in t.keys():
         #TODO: logs
         return
@@ -51,9 +59,12 @@ def __add_active_PID(directory:str,pid:str, time_to_kill:int = 30) -> None:
         'time_to_kill':(datetime.now() + timedelta(seconds=time_to_kill)).isoformat()
     }
 
-    with open(f'{directory}/{ACTIVE_FILE}', 'w', encoding='utf-8') as f:
-        json.dump(t, f)
-        f.close()
+    try:
+        with open(f'{directory}/{ACTIVE_FILE}', 'w', encoding='utf-8') as f:
+            json.dump(t, f)
+            f.close()
+    except Exception.args:
+        print('Error in the reading of the file ')
     return
 
 
