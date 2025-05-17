@@ -72,14 +72,25 @@ def __kill_active_PID(pid:str) -> None:
     system(f'kill {pid}')
     return
 
+
 def __check_for_new_files(directory:str, name:str,time_to_kill:int = 30):
     try:
-        d = subprocess.check_output(['pidof',name]).strip()
+        ps = subprocess.Popen(
+            ['ps', '-a'],
+            stdout=subprocess.PIPE
+        )
+        d = subprocess.check_output(
+            ['grep', 'transmission-cli'],
+            stdin=ps.stdout,
+            text=True  # return a str instead of bytes
+        )
+
+        ps.wait()
         print(f'Process found : {d}')
     except Exception.args:
         print('Error in the command launch')
 
-    pid:list[str] = re.findall(r'\d{4}',f'{d}')
+    pid:list[str] = re.findall(r'^(.*?)\d*',f'{d}')
     t:dict = __open_active_json(directory)
     for e in pid:
         if e in t.keys():
