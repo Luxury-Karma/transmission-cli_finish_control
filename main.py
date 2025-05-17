@@ -25,7 +25,7 @@ def __kill_active_PID(pid:str) -> None:
 def __check_for_new_files(directory:str, name:str,time_to_kill:int = 30):
     d = str(system(f'pidof {name}'))
     print(d)
-    pid:list[str] = re.findall('\d{4}',d)
+    pid:list[str] = re.split(r'\d{4}',d)
     print(pid)
     t:dict
     with open(f'{directory}/{ACTIVE_FILE}') as f :
