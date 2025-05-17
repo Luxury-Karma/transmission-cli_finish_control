@@ -24,6 +24,7 @@ def __kill_active_PID(pid:str) -> None:
 
 def __add_active_PID(pid:str, directory:str, time_to_kill:int = 30) -> None:
     t:dict
+    time_to_kill = int(time_to_kill)
     with open(f'{directory}/{ACTIVE_FILE}', 'r', encoding='utf-8') as f:
         t:dict = json.load(f)
     if pid in t.keys():
